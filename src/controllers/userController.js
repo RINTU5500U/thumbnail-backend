@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
-const { sendOtpToPhone } = require('../utils/smsService'); // Assuming you have a utility to send SMS
+const { sendOtpToPhone, sendSms } = require('../utils/smsService'); // Assuming you have a utility to send SMS
 
 async function sendOtp(req, res) {
     try {
