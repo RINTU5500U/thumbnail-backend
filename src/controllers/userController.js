@@ -64,18 +64,19 @@ async function register(req, res) {
 
 async function login(req, res) {
     try {
-        const { email, phone, password } = req.body;
-        if (!email && !phone) {
-            return res.status(400).json({ success: false, message: 'Email or phone is required' });
+        const { identifier, password } = req.body;
+        if (!identifier || !password) {
+            return res.status(400).json({ success: false, message: 'Email/Phone and password are required' });
         }
 
-        const user = await userModel.findOne({ $or: [{ email }, { phone }] });
+        const query = identifier.includes('@') ? { email: identifier } : { phone: identifier };
+        const user = await userModel.findOne(query);
         if (!user || user.password !== password) {
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
         const token = jwt.sign({ id: user._id, email: user.email, phone: user.phone }, process.env.JWT_SECRET);
-        return res.status(200).json({ success: true, message: 'Loggedin successfully', token });
+        return res.status(200).json({ success: true, message: 'Logged in successfully', token });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
