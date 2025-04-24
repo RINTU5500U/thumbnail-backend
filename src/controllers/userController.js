@@ -40,7 +40,7 @@ async function verifyOtp(req, res) {
             token = jwt.sign({ id: user._id, email: user.email, phone: user.phone }, process.env.JWT_SECRET);
         }
 
-        return res.status(200).json({ success: true, message: 'OTP verified successfully', token });
+        return res.status(200).json({ success: true, message: 'OTP verified successfully', token, user });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
