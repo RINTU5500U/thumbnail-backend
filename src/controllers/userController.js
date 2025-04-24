@@ -11,7 +11,7 @@ async function sendOtp(req, res) {
         // const expiry = new Date(Date.now() + 5 * 60 * 1000);
 
         if (type == 'register') {
-            const existingUser = await userModel.find({ phone });
+            const existingUser = await userModel.findOne({ phone });
             if (existingUser) {
                 return res.status(409).json({ success: false, message: 'User already exists with this phone number' });
             }
