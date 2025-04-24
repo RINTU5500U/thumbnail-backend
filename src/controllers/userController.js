@@ -29,13 +29,18 @@ async function sendOtp(req, res) {
 
 async function verifyOtp(req, res) {
     try {
-        const { phone, otp } = req.body;
+        const { phone, otp, type } = req.body;
         const user = await userModel.findOne({ phone, otp });
         if (!user) {
             return res.status(404).json({ success: false, message: 'Invalid OTP' });
         }
 
-        return res.status(200).json({ success: true, message: 'OTP verified successfully' });
+        let token;
+        if (type !== 'register') {
+            token = jwt.sign({ id: user._id, email: user.email, phone: user.phone }, process.env.JWT_SECRET);
+        }
+
+        return res.status(200).json({ success: true, message: 'OTP verified successfully', token });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
