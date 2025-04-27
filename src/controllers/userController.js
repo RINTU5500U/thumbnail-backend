@@ -17,7 +17,7 @@ async function sendOtp(req, res) {
             }
             await userModel.create({ phone, otp })
         } else {
-            await userModel.findOneAndUpdate({ otp }, { phone }, { new: true });
+            await userModel.findOneAndUpdate({ phone }, { otp }, { new: true });
         }
 
         console.log(`OTP for ${type}:`, otp); // Replace with SMS provider
